@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8 months with you</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0306;--wine:#6e0b24;--red:#b3122f;--pink:#ff8fb1;--blush:#ffd3e1;--ink:#f7e9ee}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 20% 0%,#3a0716 0,transparent 55%),radial-gradient(ellipse at 90% 60%,#2a0413 0,transparent 55%),var(--bg);color:var(--ink);font:300 16px/1.6 Montserrat,sans-serif;min-height:100vh;overflow-x:hidden}
+h1,h2,.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+section{position:relative;z-index:1;padding:90px 20px;max-width:1100px;margin:auto;text-align:center}
+h2{font-size:clamp(34px,6vw,56px);font-style:italic;margin-bottom:8px}
+.sub{color:var(--pink);opacity:.8;margin-bottom:44px}
+#gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);text-align:center;padding:20px;transition:opacity 1.4s}
+#gate.off{opacity:0;pointer-events:none}
+#gate h1{font-size:clamp(36px,8vw,76px);font-style:italic;line-height:1.1}
+.btn{margin-top:34px;padding:14px 38px;border:1px solid var(--pink);background:rgba(179,18,47,.25);color:var(--blush);font:400 15px Montserrat;letter-spacing:.2em;border-radius:40px;cursor:pointer;transition:.3s}
+.btn:hover{background:var(--red);box-shadow:0 0 30px var(--red)}
+#count{display:none;gap:clamp(10px,3vw,30px);margin-top:36px}
+.u{min-width:70px}
+.u b{display:block;font:italic 600 clamp(44px,11vw,92px)/1 'Cormorant Garamond',serif;color:var(--blush);text-shadow:0 0 30px var(--red)}
+.u span{font-size:12px;letter-spacing:.25em;color:var(--pink)}
+#note{margin-top:30px;color:var(--pink);opacity:.8;max-width:420px}
+#main{display:none}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
+#hero h1{font-size:clamp(46px,11vw,120px);font-style:italic;line-height:1;background:linear-gradient(90deg,#ff8fb1,#ffe0ea,#e0294a);-webkit-background-clip:text;background-clip:text;color:transparent}
+#hero p{margin-top:20px;max-width:520px;color:var(--blush)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px}
+.card{padding:22px 12px 18px;border:1px solid rgba(255,143,177,.25);border-radius:26px;background:linear-gradient(160deg,rgba(110,11,36,.35),rgba(10,3,6,.6));cursor:pointer;transition:.35s}
+.card:hover{transform:translateY(-6px);border-color:var(--pink);box-shadow:0 12px 40px rgba(179,18,47,.35)}
+.card svg{width:100%;max-width:150px;height:150px;transition:.6s}
+.card:hover svg{transform:rotate(12deg) scale(1.08)}
+.card svg.bloom{animation:bl 1.1s}
+@keyframes bl{0%{transform:scale(.3) rotate(-90deg);opacity:.2}60%{transform:scale(1.25) rotate(20deg)}100%{transform:none;opacity:1}}
+.card i{display:block;font:italic 22px 'Cormorant Garamond',serif;margin-top:8px}
+.card small{letter-spacing:.3em;font-size:10px;color:var(--pink);opacity:.6}
+.tl{position:relative;display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.m{cursor:pointer;border-radius:22px;overflow:hidden;border:1px solid rgba(255,143,177,.25);background:rgba(110,11,36,.25);text-align:left;transition:.35s}
+.m:hover{transform:rotate(-1.5deg) scale(1.03);box-shadow:0 14px 40px rgba(179,18,47,.4)}
+.m .ph{aspect-ratio:4/5;background:linear-gradient(135deg,#3a0716,#12040a);display:flex;align-items:center;justify-content:center;font-size:54px;color:var(--red)}
+.m img{width:100%;height:100%;object-fit:cover;display:block}
+.m div.t{padding:14px 18px}
+.m h3{font:italic 26px 'Cormorant Garamond',serif;font-weight:400}
+.m p{font-size:13px;color:var(--pink)}
+#letter{font:italic 24px/1.7 'Cormorant Garamond',serif;max-width:640px;margin:0 auto;min-height:260px;white-space:pre-wrap;text-align:left;color:var(--blush)}
+#big{display:none;font:italic clamp(40px,9vw,90px)/1.05 'Cormorant Garamond',serif;margin-top:40px;color:var(--pink);text-shadow:0 0 40px var(--red)}
+#modal{position:fixed;inset:0;z-index:60;background:rgba(10,3,6,.88);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+#modal.on{display:flex}
+#mb{max-width:440px;width:100%;text-align:center;padding:30px;border:1px solid var(--pink);border-radius:28px;background:linear-gradient(160deg,#3a0716,#0a0306);animation:bl .6s}
+#mb svg{width:170px;height:170px}
+#mb img{width:100%;border-radius:16px;margin-bottom:12px}
+#mb h3{font:italic 34px 'Cormorant Garamond',serif;font-weight:400}
+#mb p{margin-top:10px;font-size:17px}
+#mus{position:fixed;right:16px;bottom:16px;z-index:70;width:48px;height:48px;border-radius:50%;border:1px solid var(--pink);background:rgba(110,11,36,.7);color:var(--blush);font-size:20px;cursor:pointer;display:none}
+.heart{position:fixed;z-index:80;pointer-events:none;font-size:22px;animation:fl 1.6s forwards}
+@keyframes fl{to{transform:translate(var(--x),var(--y)) scale(1.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<audio id="au" src="song.mp3" loop preload="auto"></audio>
+<button id="mus" title="Music">♪</button>
+
+<div id="gate">
+  <h1 id="gt">Something is waiting for you</h1>
+  <div id="count"><div class="u"><b id="d">0</b><span>DAYS</span></div><div class="u"><b id="h">00</b><span>HOURS</span></div><div class="u"><b id="mi">00</b><span>MINUTES</span></div><div class="u"><b id="s">00</b><span>SECONDS</span></div></div>
+  <p id="note"></p>
+  <button class="btn" id="go">TAP TO BEGIN</button>
+</div>
+
+<div id="main">
+  <section id="hero">
+    <h1>Happy 8 months,<br><span id="nm"></span></h1>
+    <p>Since February 14, 2026, every 14th has been my favorite day. Scroll down, I made this for you.</p>
+  </section>
+  <section>
+    <h2>Your garden</h2>
+    <p class="sub">Tap a flower. Each one has something to tell you.</p>
+    <div class="grid" id="fl"></div>
+  </section>
+  <section>
+    <h2>Our eight months</h2>
+    <p class="sub">Tap a month to remember it.</p>
+    <div class="tl" id="tl"></div>
+  </section>
+  <section>
+    <h2>A letter for you</h2>
+    <p class="sub">Written tonight, only for you.</p>
+    <div id="letter"></div>
+    <button class="btn" id="gift">OPEN YOUR GIFT</button>
+    <div id="big"></div>
+  </section>
+</div>
+
+<div id="modal"><div id="mb"></div></div>
+
+<script>
+/* ============ EDIT ME ============ */
+const NAME = "Charlene";                       // her name / nickname
+const TARGET = "2026-10-14T00:00:00+07:00";   // anniversary moment in WIB (UTC+7). Change the time here if needed
+const NOW_OVERRIDE = null;                    // e.g. "2026-10-13T21:30:00+07:00" if your device clock is wrong, else leave null
+const LETTER = `Hi sayang,
+
+Eight months ago I didn't know how much brighter my days could get. Now every 14th feels like a little holiday just for us.
+
+Thank you for your patience, your laugh, and for choosing me over and over. I can't wait for all the months ahead.
+
+I love you, sayang. Always.\n\nYours,\nWilliam`;
+const FINAL = "I love you, sayang. Happy anniversary ♥";
+const MONTHS = [ // photo files: month1.jpg ... month8.jpg
+  ["Mar 14, 2026","Our first month together"],["Apr 14, 2026","Getting to know every little thing"],
+  ["May 14, 2026","Months two and three are just..."],["Jun 14, 2026","Write your memory here"],
+  ["Jul 14, 2026","Write your memory here"],["Aug 14, 2026","Write your memory here"],
+  ["Sep 14, 2026","Write your memory here"],["Oct 14, 2026","Eight months, and still choosing you"]];
+const NOTES = { // message shown when she taps each flower
+  carnation:"Like the stripes, you make everything about me a little sweeter.",
+  begonia:"You make me soften and lean toward you, always.",
+  azalea:"Everything about you blooms when you smile.",
+  spider:"Red, dramatic and unforgettable. Just like you in my head all day.",
+  fuchsia:"Delicate on the outside, strong in all the ways I admire.",
+  lily:"Pure, graceful, and the first thing I notice in any room.",
+  hydrangea:"So many colors of you, and I love every single one.",
+  hyacinth:"Every little moment with you adds up to something beautiful.",
+  peony:"You are my favorite kind of soft, warm, and full of love.",
+  dahlia:"Bold, layered, endlessly surprising. That is you."};
+/* ================================== */
+
+const $=s=>document.querySelector(s), au=$('#au');
+$('#nm').textContent=NAME;
+const now=()=>NOW_OVERRIDE?new Date(NOW_OVERRIDE).getTime()+(Date.now()-t0):Date.now(), t0=Date.now();
+const tgt=new Date(TARGET).getTime(), preview=true;
+
+/* ---------- flowers (SVG, drawn in code) ---------- */
+const P=(n,w,h,f,o,rot=0,st='none',k=1)=>{let s='';for(let i=0;i<n;i++)s+=`<path transform="rotate(${rot+i*360/n})" d="M0 0C${-w} ${-h*.35} ${-w*k} ${-h*.95} 0 ${-h}C${w*k} ${-h*.95} ${w} ${-h*.35} 0 0Z" fill="${f}" fill-opacity="${o}" stroke="${st}" stroke-width=".6"/>`;return s};
+const C=(r,c='#ffd98a')=>`<circle r="${r}" fill="${c}"/>`;
+const stam=(n,l,c='#ffe9a8')=>{let s='';for(let i=0;i<n;i++){const a=i*360/n;s+=`<line transform="rotate(${a})" y2="${-l}" stroke="${c}" stroke-width="1"/><circle transform="rotate(${a}) translate(0 ${-l})" r="2" fill="#b0702f"/>`}return s};
+const F={
+carnation:()=>P(24,9,50,'#fff',.97,0,'#d4435f',.5)+P(20,8,40,'#e0607a',.75,8,'none',.5)+P(16,6,28,'#fff',.9,4,'#c2304f',.5)+P(12,5,16,'#e0607a',.9)+C(4,'#f3a0b5'),
+begonia:()=>P(5,24,34,'#f08aa8',.95,0,'#fff3')+P(5,18,26,'#e5638c',.95,36)+P(5,11,14,'#fbd0dc',1,0)+C(5),
+azalea:()=>P(5,28,48,'#f8c9d9',.95,0,'#f0a5bf')+P(5,16,28,'#fde5ee',.9,36)+stam(9,26)+C(4),
+spider:()=>{let s='';for(let i=0;i<14;i++)s+=`<path transform="rotate(${i*360/14})" d="M0 0C${i%2?-26:22} -8 ${i%2?30:-28} -36 ${i%3?8:-6} -50" fill="none" stroke="${i%2?'#e2314f':'#a30f2a'}" stroke-width="2.2" stroke-linecap="round"/>`;return s+C(4)},
+fuchsia:()=>P(4,9,38,'#f0709b',1,0,'#0003',.4).replace(/rotate\(/g,'translate(0 -8) rotate(')+`<ellipse cy="6" rx="17" ry="20" fill="#8b2fc9"/><ellipse cy="2" rx="11" ry="12" fill="#b46ae8"/>`+Array.from({length:6},(_,i)=>`<line x1="${-10+i*4}" y1="20" x2="${-14+i*5.6}" y2="52" stroke="#f7a6c2" stroke-width="1"/><circle cx="${-14+i*5.6}" cy="52" r="2" fill="#e0294a"/>`).join(''),
+lily:()=>P(6,13,52,'#fff',.97,0,'#f3b6c8',.3)+P(6,3,40,'#f06d95',.5)+stam(6,26,'#f7e1a0')+C(4),
+hydrangea:()=>{let s='';const col=['#f4a9c4','#c9a6ee','#a9c3f5'];for(let i=0;i<30;i++){const r=Math.sqrt(i)*9.5,a=i*2.4;s+=`<g transform="translate(${r*Math.cos(a)} ${r*Math.sin(a)}) rotate(${i*40})">${P(4,5,9,col[i%3],1,0,'#fff6')}${C(1.5)}</g>`}return s},
+hyacinth:()=>{let s='<path d="M0 55V-8" stroke="#6fa97f" stroke-width="3"/>';for(let i=0;i<15;i++){const y=-52+i*4.5,w=Math.min(14,4+i*1);for(const sx of[-1,1])s+=`<g transform="translate(${sx*w*.55} ${y})">${P(5,3,6.5,i%3?'#a98af0':'#c3adf5',1,i*20,'#fff5')}</g>`}return s},
+peony:()=>P(14,16,52,'#f2b4cb',.9,0)+P(12,15,42,'#ea8fb2',.92,15)+P(10,13,31,'#e0709c',.95,5)+P(8,11,21,'#c9457a',.97,20)+P(6,8,11,'#e78fb2',1)+C(5),
+dahlia:()=>P(16,9,54,'#f7b6cf',.95,0,'#c64a7c',.3)+P(16,8,44,'#ec86ae',.95,11,'#8e1f4a',.3)+P(14,7,32,'#cf4d85',.95,5,'#5a0f2c',.3)+P(10,6,20,'#8e1f4a',1,18)+C(5)};
+const NAMES={carnation:'Carnation, double striped',begonia:'Weeping begonia',azalea:'Azalea',spider:'Spider lily',fuchsia:'Fuchsia',lily:'Lilies',hydrangea:'Hydrangeas',hyacinth:'Hyacinth',peony:'Peony',dahlia:'Dahlia'};
+const svg=k=>`<svg viewBox="-60 -60 120 120">${F[k]()}</svg>`;
+const fl=$('#fl');
+Object.keys(F).forEach(k=>{const c=document.createElement('div');c.className='card';c.innerHTML=`${svg(k)}<i>${NAMES[k]}</i><small>TAP ME</small>`;
+ c.onclick=e=>{c.querySelector('svg').classList.remove('bloom');void c.offsetWidth;c.querySelector('svg').classList.add('bloom');burst(e.clientX,e.clientY,'🌸');
+  setTimeout(()=>openM(`${svg(k)}<h3>${NAMES[k]}</h3><p>${NOTES[k]}</p>`),450)};fl.appendChild(c)});
+
+/* ---------- timeline ---------- */
+const tl=$('#tl');
+MONTHS.forEach((m,i)=>{const d=document.createElement('div');d.className='m';
+ d.innerHTML=`<div class="ph"><img src="month${i+1}.jpg" alt="Month ${i+1}"></div><div class="t"><h3>Month ${i+1}</h3></div>`;
+ const img=d.querySelector('img');img.onerror=()=>{img.parentNode.textContent='♥'};
+ d.onclick=()=>{const ok=d.querySelector('img');openM(`${ok?`<img src="month${i+1}.jpg">`:'<div style="font-size:80px;color:#b3122f">♥</div>'}<h3>Month ${i+1}</h3><p>${m[1]}</p>`)};tl.appendChild(d)});
+
+/* ---------- modal & hearts ---------- */
+const openM=h=>{$('#mb').innerHTML=h;$('#modal').classList.add('on')};
+$('#modal').onclick=()=>$('#modal').classList.remove('on');
+function burst(x,y,ch='♥',n=14){for(let i=0;i<n;i++){const e=document.createElement('div');e.className='heart';e.textContent=ch=='♥'&&i%2?'💗':ch;e.style.left=x+'px';e.style.top=y+'px';
+ e.style.setProperty('--x',(Math.random()*260-130)+'px');e.style.setProperty('--y',(-Math.random()*220-30)+'px');document.body.appendChild(e);setTimeout(()=>e.remove(),1700)}}
+document.addEventListener('click',e=>{if(!e.target.closest('.card,.m,#modal'))burst(e.clientX,e.clientY,'♥',6)});
+
+/* ---------- falling petals ---------- */
+const cv=$('#cv'),x=cv.getContext('2d');let W,H;const rs=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};rs();onresize=rs;
+const cols=['#ff8fb1','#e0294a','#8e1f4a','#ffd3e1','#b3122f'];
+const ps=Array.from({length:45},()=>({x:Math.random()*W,y:Math.random()*H,r:3+Math.random()*7,v:.3+Math.random()*.9,s:Math.random()*6,c:cols[Math.random()*5|0]}));
+(function loop(){x.clearRect(0,0,W,H);ps.forEach(p=>{p.y+=p.v;p.s+=.02;p.x+=Math.sin(p.s)*.7;if(p.y>H+10){p.y=-10;p.x=Math.random()*W}
+ x.save();x.translate(p.x,p.y);x.rotate(p.s);x.fillStyle=p.c;x.globalAlpha=.55;x.beginPath();x.ellipse(0,0,p.r,p.r*.55,0,0,7);x.fill();x.restore()});requestAnimationFrame(loop)})();
+
+/* ---------- music ---------- */
+const mus=$('#mus');let playing=false;
+const play=()=>au.play().then(()=>{playing=true;mus.textContent='♪'}).catch(()=>{});
+mus.onclick=()=>{if(playing){au.pause();playing=false;mus.textContent='✕'}else play()};
+
+/* ---------- countdown / unlock ---------- */
+let started=false,unlocked=false;
+function unlock(){if(unlocked)return;unlocked=true;$('#gate').classList.add('off');$('#main').style.display='block';scrollTo(0,0);burst(innerWidth/2,innerHeight/2,'💖',24);setTimeout(()=>$('#gate').style.display='none',1500)}
+function tick(){const left=tgt-now();
+ if(left<=0||preview){if(started)unlock();else{$('#gt').textContent='It is time ♥';$('#note').textContent='';$('#count').style.display='none'}return}
+ const t=Math.floor(left/1000);$('#d').textContent=Math.floor(t/86400);$('#h').textContent=String(Math.floor(t%86400/3600)).padStart(2,'0');
+ $('#mi').textContent=String(Math.floor(t%3600/60)).padStart(2,'0');$('#s').textContent=String(t%60).padStart(2,'0')}
+setInterval(tick,500);tick();
+$('#go').onclick=()=>{started=true;play();mus.style.display='block';
+ if(tgt-now()<=0||preview)return unlock();
+ $('#go').style.display='none';$('#gt').textContent='Until our 8 months';$('#count').style.display='flex';$('#note').textContent='Keep this page open. At midnight it opens by itself, just for you.'};
+
+/* ---------- letter & gift ---------- */
+let typed=false;
+new IntersectionObserver((e,o)=>{if(e[0].isIntersecting&&!typed){typed=true;let i=0;const L=$('#letter');(function t(){L.textContent=LETTER.slice(0,i++);if(i<=LETTER.length)setTimeout(t,35)})()}}).observe($('#letter'));
+$('#gift').onclick=e=>{$('#gift').style.display='none';const b=$('#big');b.textContent=FINAL;b.style.display='block';
+ for(let i=0;i<8;i++)setTimeout(()=>burst(Math.random()*innerWidth,innerHeight*.7,'♥',12),i*250)};
+</script>
+</body>
+</html>
