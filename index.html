@@ -76,6 +76,15 @@ h2{font-size:clamp(34px,6vw,56px);font-style:italic;margin-bottom:8px}
 .qz{max-width:520px;margin:auto}.qz h3{font:italic 28px 'Cormorant Garamond',serif;font-weight:400;margin-bottom:16px}
 .qz button{display:block;width:100%;margin:8px 0;padding:12px;border-radius:16px;border:1px solid rgba(255,143,177,.35);background:rgba(110,11,36,.3);color:var(--ink);font:300 15px Montserrat;cursor:pointer;transition:.25s}
 .qz button:hover{background:var(--red)}.qz .ok{background:#2c7a4b!important}.qz .no{background:#5a0f1e!important}
+#main section:not(.act){display:none}
+#main section.act{animation:pgin .7s}
+@keyframes pgin{from{opacity:0;transform:translateX(40px)}}
+#main section{padding-bottom:120px}
+#nav{position:fixed;left:16px;right:76px;bottom:16px;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:8px}
+#nav .btn{margin:0;padding:10px 22px;font-size:13px;background:rgba(10,3,6,.8)}
+#dots{display:flex;gap:8px}
+#dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,143,177,.3);cursor:pointer;transition:.3s}
+#dots i.on{background:var(--pink);box-shadow:0 0 12px var(--red);transform:scale(1.35)}
 </style>
 </head>
 <body>
@@ -93,7 +102,7 @@ h2{font-size:clamp(34px,6vw,56px);font-style:italic;margin-bottom:8px}
 <div id="main">
   <section id="hero">
     <h1>Happy 8 months,<br><span id="nm"></span></h1>
-    <p>Since February 14, 2026, every 14th has been my favorite day. Scroll down, I made this for you.</p>
+    <p>Since February 14, 2026, every 14th has been my favorite day. Tap Next, I made this for you.</p>
   </section>
   <section>
     <h2>Your garden</h2>
@@ -119,6 +128,7 @@ h2{font-size:clamp(34px,6vw,56px);font-style:italic;margin-bottom:8px}
     <button class="btn" id="gift">OPEN YOUR GIFT</button>
     <div id="big"></div>
   </section>
+<div id="nav"><button class="btn" id="pv">‹ Back</button><div id="dots"></div><button class="btn" id="nx">Next ›</button></div>
 </div>
 
 <div id="modal"><div id="mb"></div></div>
@@ -249,6 +259,19 @@ function g3(){let i=0,sc=0;const el=$('#gm');(function q(){if(i>=QUIZ.length){el
 const G={1:g1,2:g2,3:g3};
 document.querySelectorAll('.gb').forEach(b=>b.onclick=()=>{stop();document.querySelectorAll('.gb').forEach(x=>x.classList.remove('on'));b.classList.add('on');G[b.dataset.g]()});
 g1();
+
+/* ---------- pages ---------- */
+const pgs=[...document.querySelectorAll('#main>section')];let cur=0;
+$('#dots').innerHTML=pgs.map((_,i)=>'<i></i>').join('');
+function go(n){stop();cur=Math.max(0,Math.min(pgs.length-1,n));pgs.forEach((p,i)=>p.classList.toggle('act',i==cur));
+ document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i==cur));
+ $('#pv').style.visibility=cur?'visible':'hidden';$('#nx').style.visibility=cur<pgs.length-1?'visible':'hidden';scrollTo(0,0)}
+$('#pv').onclick=()=>go(cur-1);$('#nx').onclick=()=>go(cur+1);
+document.querySelectorAll('#dots i').forEach((d,i)=>d.onclick=()=>go(i));
+onkeydown=e=>{if(e.key=='ArrowRight')go(cur+1);if(e.key=='ArrowLeft')go(cur-1)};
+let sx,sy;ontouchstart=e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY};
+ontouchend=e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5)go(cur+(dx<0?1:-1))};
+go(0);
 
 /* ---------- letter & gift ---------- */
 let typed=false;
